@@ -5,13 +5,23 @@ const BASE_URL =
   'https://mate-academy.github.io/react_dynamic-list-of-todos/api';
 
 function wait(delay: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, delay));
+  return new Promise(resolve => {
+    setTimeout(resolve, delay);
+  });
 }
 
 function get<T>(url: string): Promise<T> {
+  const fullURL = `${BASE_URL}${url}.json`;
+
   return wait(300)
-    .then(() => fetch(`${BASE_URL}${url}.json`))
-    .then(res => res.json());
+    .then(() => fetch(fullURL))
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('Failed to load data');
+      }
+
+      return res.json();
+    });
 }
 
 export const getTodos = () => get<Todo[]>('/todos');

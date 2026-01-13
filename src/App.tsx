@@ -20,9 +20,12 @@ export const App: React.FC = () => {
   const [isUserLoading, setIsUserLoading] = useState(false);
 
   const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('all');
 
-  // LOAD TODOS
+  type FilterStatus = 'all' | 'active' | 'completed';
+
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
+
+  // load todos
   useEffect(() => {
     setIsTodosLoading(true);
 
@@ -31,7 +34,7 @@ export const App: React.FC = () => {
       .finally(() => setIsTodosLoading(false));
   }, []);
 
-  // LOAD USER when selectedTodo changes
+  // load user
   useEffect(() => {
     if (!selectedTodo) {
       setUser(null);
@@ -50,9 +53,9 @@ export const App: React.FC = () => {
     const matchesQuery = todo.title.toLowerCase().includes(query.toLowerCase());
 
     const matchesStatus =
-      status === 'all' ||
-      (status === 'active' && !todo.completed) ||
-      (status === 'completed' && todo.completed);
+      filterStatus === 'all' ||
+      (filterStatus === 'active' && !todo.completed) ||
+      (filterStatus === 'completed' && todo.completed);
 
     return matchesQuery && matchesStatus;
   });
@@ -67,9 +70,9 @@ export const App: React.FC = () => {
             <div className="block">
               <TodoFilter
                 query={query}
-                status={status}
-                onQueryChange={setQuery}
-                onStatusChange={setStatus}
+                setQuery={setQuery}
+                filterStatus={filterStatus}
+                setFilterStatus={setFilterStatus}
               />
             </div>
 

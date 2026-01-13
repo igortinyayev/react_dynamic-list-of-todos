@@ -1,55 +1,61 @@
+import React from 'react';
+
 type Props = {
   query: string;
-  status: string;
-  onQueryChange: (value: string) => void;
-  onStatusChange: (value: string) => void;
+  setQuery: (value: string) => void;
+  filterStatus: 'all' | 'active' | 'completed';
+  setFilterStatus: (status: 'all' | 'active' | 'completed') => void;
 };
 
 export const TodoFilter: React.FC<Props> = ({
   query,
-  status,
-  onQueryChange,
-  onStatusChange,
-}) => (
-  <form className="field has-addons">
-    <p className="control">
-      <span className="select">
-        <select
-          data-cy="statusSelect"
-          value={status}
-          onChange={e => onStatusChange(e.target.value)}
-        >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="completed">Completed</option>
-        </select>
-      </span>
-    </p>
-
-    <p className="control is-expanded has-icons-left has-icons-right">
-      <input
-        data-cy="searchInput"
-        type="text"
-        className="input"
-        placeholder="Search..."
-        value={query}
-        onChange={e => onQueryChange(e.target.value)}
-      />
-
-      <span className="icon is-left">
-        <i className="fas fa-magnifying-glass" />
-      </span>
-
-      {query && (
-        <span className="icon is-right" style={{ pointerEvents: 'all' }}>
-          <button
-            data-cy="clearSearchButton"
-            type="button"
-            className="delete"
-            onClick={() => onQueryChange('')}
-          />
+  setQuery,
+  filterStatus,
+  setFilterStatus,
+}) => {
+  return (
+    <form className="field has-addons">
+      <p className="control">
+        <span className="select">
+          <select
+            data-cy="statusSelect"
+            value={filterStatus}
+            onChange={e =>
+              setFilterStatus(e.target.value as 'all' | 'active' | 'completed')
+            }
+          >
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
         </span>
-      )}
-    </p>
-  </form>
-);
+      </p>
+
+      <p className="control is-expanded has-icons-left has-icons-right">
+        <input
+          data-cy="searchInput"
+          type="text"
+          className="input"
+          placeholder="Search..."
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+        />
+
+        <span className="icon is-left">
+          <i className="fas fa-magnifying-glass" />
+        </span>
+
+        {query && (
+          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+            <button
+              type="button"
+              className="delete"
+              data-cy="clearSearchButton"
+              onClick={() => setQuery('')}
+            />
+          </span>
+        )}
+      </p>
+    </form>
+  );
+};
