@@ -11,13 +11,13 @@ function wait(delay: number): Promise<void> {
 }
 
 function get<T>(url: string): Promise<T> {
-  const fullURL = `${BASE_URL}${url}.json`;
+  const fullURL = BASE_URL + url + '.json';
 
   return wait(300)
     .then(() => fetch(fullURL))
     .then(res => {
       if (!res.ok) {
-        throw new Error('Failed to load data');
+        throw new Error(`Request failed with status ${res.status}`);
       }
 
       return res.json();
